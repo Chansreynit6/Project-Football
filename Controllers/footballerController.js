@@ -1,7 +1,5 @@
 const Footballer = require("../models/footballerModels");
 
-
-
 // create
 exports.createFootballer = async (req, res) => {
   try {
@@ -12,27 +10,54 @@ exports.createFootballer = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
- 
+
 // getall
 exports.getAllFootballers = async (req, res) => {
-    try {
-        const footballers = await Footballer.find();  // Find all footballers in the database
-        res.status(200).json(footballers); // Respond with the footballers in JSON format
-    } catch (error) {
-        res.status(500).json({ error: error.message }); // Respond with an error if something goes wrong
-    }
+  try {
+      const footballers = await Footballer.find(); 
+      res.status(200).json(footballers);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 };
+
 
 // getFootballerById
-exports.getAllFootballerById = async (req,res) =>
-{
-    try{
-        const footballer = await Footballer.findById (req,params.id);
-        if (!footballer) res.status(404).json({message:"Footballer not found"});
-        res.status(200).json(footballer);
-
-    } catch(error){
-        res.status(500).json({error:error.message});
-    }
+exports.getFootballerById = async (req, res) => {
+  try {
+    const footballer = await Footballer.findById(req.params.id);
+    if (!footballer)
+      return res.status(404).json({ message: "Footballer not found" });
+    res.status(200).json(footballer);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
+// update fooballer
+exports.updateFootballer = async (req, res) => {
+  try {
+    const footballer = await Footballer.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!footballer)
+      return res.status(404).json({ message: "Footballer not found" });
+    res.status(200).json(footballer);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// delete footaballer
+exports.deleteFootballer = async (req, res) => {
+  try {
+    const footballer = await Footballer.findByIdAndDelete(req.params.id);
+    if (!footballer)
+      return res.status(404).json({ message: "Footballer not found" });
+    res.status(200).json({ message: "Footballer deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
