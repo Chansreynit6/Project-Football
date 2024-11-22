@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 
 // Use the auth routes
 app.use('/api/auth', authRoutes);
-app.use('/api/footballers', footballerRoutes); // Added the leading slash
+app.use('/api/footballers', footballerRoutes); 
 
 // Start the server
 app.listen(PORT, () => {
