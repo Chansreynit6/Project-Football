@@ -14,13 +14,12 @@ exports.createFootballer = async (req, res) => {
 // getall
 exports.getAllFootballers = async (req, res) => {
   try {
-      const footballers = await Footballer.find(); 
-      res.status(200).json(footballers);
+    const footballers = await Footballer.find();
+    res.status(200).json(footballers);
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
-
 
 // getFootballerById
 exports.getFootballerById = async (req, res) => {
