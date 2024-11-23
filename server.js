@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const footballers = require ('./routes/footballerRoutes');
+
 // Initialize the app
 dotenv.config();
 const app = express();
@@ -15,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // Use the auth routes
 app.use('/api/auth', authRoutes);
-// Start the server
+app.use('/api/footballers',footballers)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
