@@ -7,7 +7,7 @@ exports.registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-    
+
         if (!username || !email || !password) {
             return res.status(400).json({ message: 'Username, email, and password are required' });
         }
@@ -17,7 +17,7 @@ exports.registerUser = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
 
-    
+
         const role = email === 'admin@gmail.com' ? 'admin' : 'user';
         const newUser = new User({
             username,
@@ -46,7 +46,59 @@ exports.getAllUsers = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+//get user by id
+exports.getUserByid = async (req, res) => {
+    try {
+        // const {id}=req.param.id;
+        // const userById = await User.findById(req.param.id);
+        const userById = await User.findById(req.params.id);
 
+        if (!User) {
+            return res.status(404).json({ message: 'User Not Found' });
+        }
+        res.status(200).json(userById);
+
+    } catch (error) {
+        console.error('Error retrieving user:', error);
+        if (error.kind === 'ObjectId') {
+            return res.status(400).json({ message: 'Invalid User ID' })
+        }
+        res.status(500).json({ message: 'Internal server error' });
+
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const deleteUserById = await User.findByIdAndDelete(req.params.id);
+        if (!deleteUserById) {
+            return res.status(404).json({ message: 'Not Found Id' });
+        }
+        res.status(200).json({ message: 'Delete user Successful', user: this.deleteUser });
+    } catch (error) {
+        if (error.kind === 'ObjectId') {
+            return res.status(400).json({ message: 'Invalid User' })
+        }
+        res.status(500).json({ message: 'Internal server Error' });
+    }
+};
+
+exports.updateUser = async (req, res) => {
+    try {
+        const updatUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+        if (!updatUser) {
+            return res.status(404).json({ message: 'Not found Id' });
+        }
+        res.status(200).json({ message: 'update user successful', user: this.updateUser });
+    }
+    catch (error) {
+        if (error.kind === 'ObjectId') {
+            return res.status(400).json({ message: 'Invalid user Id' });
+        }
+        res.status(500).json({ message: 'Internal server Error' });
+    }
+
+};
 
 
 exports.loginUser = async (req, res) => {
