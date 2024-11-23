@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const footballers = require ('./routes/footballerRoutes');
-
+// const { protect, adminOnly } = require('./Modelware/authmodelware'); 
 // Initialize the app
 dotenv.config();
 const app = express();

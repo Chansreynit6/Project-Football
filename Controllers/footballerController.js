@@ -1,15 +1,14 @@
 const Footballer = require("../models/footballerModels");
-
-// create
 exports.createFootballer = async (req, res) => {
   try {
     const footballer = new Footballer(req.body);
-    await footballer.save();
-    res.status(200).json(footballer);
+    await footballer.save(); 
+    res.status(200).json(footballer); 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message }); 
   }
 };
+
 
 // getall
 exports.getAllFootballers = async (req, res) => {
