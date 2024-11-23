@@ -6,7 +6,6 @@ const footballerSchema = new mongoose.Schema({
   nationality: { type: String, required: true },
   positions: { type: [String], required: true }, 
   image: { type: String },
-  team: { type: String, required: false }
   
 });
 
