@@ -100,7 +100,7 @@ exports.updateUser = async (req, res) => {
 
 };
 
-
+//login
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -120,10 +120,10 @@ exports.loginUser = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: user._id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: '5d' }
-        );
+            { id: user._id, role: user.role },  
+            process.env.JWT_SECRET, 
+            { expiresIn: '5d' }  
+          );
 
         res.status(200).json({
             message: 'Login successful',
