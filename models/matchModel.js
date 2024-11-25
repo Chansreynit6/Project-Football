@@ -12,7 +12,7 @@ const matchSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
+    required: null,
   },
   venue: {
     type: String,
@@ -20,8 +20,8 @@ const matchSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["upcoming", "ongoing", "completed"],
-    default: "upcoming",
+    enum: ["coming soon", "upcoming", "completed"],
+    default: "coming soon",
   },
   referee: {
     type: String,
@@ -53,6 +53,23 @@ const matchSchema = new mongoose.Schema({
 // Middleware to update `updatedAt` on save
 matchSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
+  const now = new Date();
+  const nearRange = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+  if (!this.date) {
+    // If the date is null or not provided
+    this.status = "coming soon";
+  } else if (this.date - now <= nearRange && this.date > now) {
+    // If the date is within the next 7 days
+    this.status = "coming soon";
+  } else if (this.date > now) {
+    // If the date is beyond the near range but still in the future
+    this.status = "upcoming";
+  } else {
+    // If the date is in the past
+    this.status = "completed";
+  }
+
   next();
 });
 
