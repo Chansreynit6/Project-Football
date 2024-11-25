@@ -3,8 +3,11 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db"); // Assuming you have a db.js file to connect to MongoDB
 const authRoutes = require("./routes/authRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
+const footballers = require ('./routes/footballerRoutes');
+// const { protect, adminOnly } = require('./Modelware/authmodelware'); 
+// Initialize the app
+dotenv.config();
 
-dotenv.config(); // Load environment variables
 const app = express();
 
 // Middleware to parse JSON bodies
@@ -45,6 +48,11 @@ app.post("/endpoint", (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
+
+// Use the auth routes
+app.use('/api/auth', authRoutes);
+app.use('/api/footballers',footballers)
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
