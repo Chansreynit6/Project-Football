@@ -6,13 +6,13 @@ const {
   getTicketById,
   updateTicket,
   deleteTicket,
-} = require("../controllers/ticketController");
+} = require("../Controllers/ticketController");
 
-// Define routes
-router.post("/", createTicket);
-router.get("/", getAllTickets);
-router.get("/:id", getTicketById);
-router.put("/:id", updateTicket);
-router.delete("/:id", deleteTicket);
+// Routes for ticket operations
+router.post("/", createTicket); // Create a ticket
+router.get("/", getAllTickets); // Get all tickets
+router.get("/:id", getTicketById); // Get ticket by ID
+router.put("/:id", updateTicket); // Update ticket by ID
+router.delete("/:id", deleteTicket); // Delete ticket by ID
 
 module.exports = router;

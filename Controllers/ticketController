@@ -1,11 +1,28 @@
-const Ticket = require("../models/Ticket");
+const Ticket = require("../models/ticket");
 
 // Controller to create a ticket
 const createTicket = async (req, res) => {
   try {
-    const ticket = new Ticket(req.body);
+    const { title, description, status, priority } = req.body;
+
+    // Check if title and description are provided
+    if (!title || !description) {
+      return res
+        .status(400)
+        .json({ error: "Title and description are required" });
+    }
+
+    // Create a new ticket using the provided or default data
+    const ticket = new Ticket({
+      title,
+      description,
+      status: status || "open", // Default to 'open' if no status is provided
+      priority: priority || "medium", // Default to 'medium' if no priority is provided
+    });
+
+    // Save the ticket to the database
     const savedTicket = await ticket.save();
-    res.status(201).json(savedTicket);
+    res.status(201).json(savedTicket); // Return the created ticket as a response
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -14,19 +31,19 @@ const createTicket = async (req, res) => {
 // Controller to get all tickets
 const getAllTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find();
-    res.status(200).json(tickets);
+    const tickets = await Ticket.find(); // This fetches all tickets from MongoDB
+    res.status(200).json(tickets); // Responds with the tickets as JSON
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); // Handles errors, like connection issues
   }
 };
 
-// Controller to get a single ticket by ID
+// Controller to get a ticket by ID
 const getTicketById = async (req, res) => {
   try {
     const ticket = await Ticket.findById(req.params.id);
     if (!ticket) return res.status(404).json({ message: "Ticket not found" });
-    res.status(200).json(ticket);
+    res.status(200).json(ticket); // Return the found ticket
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -38,7 +55,7 @@ const updateTicket = async (req, res) => {
     const updatedTicket = await Ticket.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true } // Return the updated ticket
     );
     if (!updatedTicket)
       return res.status(404).json({ message: "Ticket not found" });
