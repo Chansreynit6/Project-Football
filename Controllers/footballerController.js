@@ -1,15 +1,14 @@
 const Footballer = require("../models/footballerModels");
-
-// create
 exports.createFootballer = async (req, res) => {
   try {
     const footballer = new Footballer(req.body);
-    await footballer.save();
-    res.status(200).json(footballer);
+    await footballer.save(); 
+    res.status(200).json(footballer); 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message }); 
   }
 };
+
 
 // getall
 exports.getAllFootballers = async (req, res) => {
@@ -25,8 +24,10 @@ exports.getAllFootballers = async (req, res) => {
 exports.getFootballerById = async (req, res) => {
   try {
     const footballer = await Footballer.findById(req.params.id);
-    if (!footballer)
+    if (!footballer){
       return res.status(404).json({ message: "Footballer not found" });
+    }
+      
     res.status(200).json(footballer);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -41,8 +42,9 @@ exports.updateFootballer = async (req, res) => {
       req.body,
       { new: true }
     );
-    if (!footballer)
+    if (!footballer){
       return res.status(404).json({ message: "Footballer not found" });
+    }
     res.status(200).json(footballer);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -53,8 +55,9 @@ exports.updateFootballer = async (req, res) => {
 exports.deleteFootballer = async (req, res) => {
   try {
     const footballer = await Footballer.findByIdAndDelete(req.params.id);
-    if (!footballer)
+    if (!footballer){
       return res.status(404).json({ message: "Footballer not found" });
+    }
     res.status(200).json({ message: "Footballer deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });

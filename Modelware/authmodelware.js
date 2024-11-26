@@ -15,9 +15,11 @@ exports.protect = (req, res, next) => {
   }
 };
 
-exports.adminOnly = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Admins only' });
+exports. adminOnly = (req, res, next) => {
+  console.log(req.user.role);  // Check what role is being passed in the request
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Admins only' });
   }
-  next();
 };
