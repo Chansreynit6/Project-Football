@@ -17,51 +17,32 @@ exports.registerUser = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const role= 'user';
+        const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random&color=fff`;
         const newUser = new User({
             username,
             email,
             password: hashedPassword,
+            avatar,
             role
         });
 
-        await newUser.save();
+        const saveUser= await newUser.save();
+        const generateToken = (payload) => {
+            return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+        };
+        const token = generateToken({
+            _id: saveUser._id,
+            email: saveUser.email,
+            username: saveUser.fullName,
+            role: saveUser.role,
+          });
 
-        res.status(201).json({ message: 'User registered successfully!', role });
+        res.status(201).json({ message: 'User registered successfully!',token, role });
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-// exports.registerAdmin = async (req, res) => {
-//     try {
-//         const { username, email, password } = req.body;
-
-
-//         if (!username || !email || !password) {
-//             return res.status(400).json({ message: 'Username, email, and password are required' });
-//         }
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return res.status(400).json({ message: 'User already exists' });
-//         }
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         const role='admin';
-//         const newUser = new User({
-//             username,
-//             email,
-//             password: hashedPassword,
-//             role,
-//         });
-
-//         await newUser.save();
-
-//         res.status(201).json({ message: 'User registered successfully!', role });
-//     } catch (error) {
-//         console.error('Registration error:', error);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// };
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
