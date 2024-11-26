@@ -1,12 +1,13 @@
 const express = require('express');
 const { createMatch, getAllMatch, getMatchId, updateMatch, deleteMatch} = require('../Controllers/matchController');
-const authorizeRole = require('../Modelware/authmodelware'); 
 const matchroute = express.Router();
-matchroute.post('/match', createMatch);
-matchroute.get('/matchs', getAllMatch);
-matchroute.get('/matchs/:id', getMatchId);
-matchroute.put('/matchs/:id',updateMatch);
-matchroute.delete('/matchs/:id',deleteMatch);
+const {protect,adminOnly} = require('../Modelware/authmodelware');
+
+matchroute.post('/match',protect,adminOnly, createMatch);
+matchroute.get('/matchs',protect,adminOnly,getAllMatch);
+matchroute.get('/matchs/:id', protect,adminOnly,getMatchId);
+matchroute.put('/matchs/:id',protect,adminOnly,updateMatch);
+matchroute.delete('/matchs/:id',protect,adminOnly,deleteMatch);
 
 
 
