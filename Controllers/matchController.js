@@ -76,7 +76,7 @@ exports.deleteMatch = async (req,res) => {
     const matchId = req.params.id;
     const matchDelete = await footballmatch.findByIdAndDelete(matchId);
     return res.status(200).json({message: 'match delete successful', matchDelete})
-  }catch(error) {
+  }catch(error) {                         
     console.error(error);
     return res.status(500).json({error: 'Internal server error'}) 
   }
