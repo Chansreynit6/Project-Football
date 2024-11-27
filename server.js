@@ -5,7 +5,7 @@ const connectDB = require("./config/db"); // Assuming you have a db.js file to c
 const authRoutes = require("./routes/authRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
 const footballers = require ('./routes/footballerRoutes');
-const { protect, adminOnly } = require('./Modelware/authmodelware'); 
+// const { protect, adminOnly } = require('./Modelware/authmodelware'); 
 const matchRoute = require('./routes/matchRoute')
 
 dotenv.config();
