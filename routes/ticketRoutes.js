@@ -7,12 +7,13 @@ const {
   updateTicket,
   deleteTicket,
 } = require("../Controllers/ticketController");
+const { protect, adminOnly } = require("../Modelware/authmodelware");
 
 // Routes for ticket operations
-router.post("/", createTicket); // Create a ticket
-router.get("/", getAllTickets); // Get all tickets
-router.get("/:id", getTicketById); // Get ticket by ID
-router.put("/:id", updateTicket); // Update ticket by ID
-router.delete("/:id", deleteTicket); // Delete ticket by ID
+router.post("/", protect, adminOnly, createTicket); // Create a ticket
+router.get("/", protect, adminOnly, getAllTickets); // Get all tickets
+router.get("/:id", protect, adminOnly, getTicketById); // Get ticket by ID
+router.put("/:id", protect, adminOnly, updateTicket); // Update ticket by ID
+router.delete("/:id", protect, adminOnly, deleteTicket); // Delete ticket by ID
 
 module.exports = router;
