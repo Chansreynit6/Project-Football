@@ -13,7 +13,7 @@ exports.registerUser = async (req, res) => {
         }
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(409).json({ message: 'User already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const role= 'user';
@@ -28,7 +28,7 @@ exports.registerUser = async (req, res) => {
 
         const saveUser= await newUser.save();
         const generateToken = (payload) => {
-            return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+            return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' });
         };
         const token = generateToken({
             _id: saveUser._id,
@@ -58,8 +58,6 @@ exports.getAllUsers = async (req, res) => {
 //get user by id
 exports.getUserByid = async (req, res) => {
     try {
-        // const {id}=req.param.id;
-        // const userById = await User.findById(req.param.id);
         const userById = await User.findById(req.params.id);
 
         if (!User) {
@@ -115,7 +113,7 @@ exports.loginUser = async (req, res) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
+            return res.status(409).json({ message: 'Email and password are required' });
         }
 
         const user = await User.findOne({ email });
@@ -131,7 +129,7 @@ exports.loginUser = async (req, res) => {
         const token = jwt.sign(
             { id: user._id, role: user.role },  
             process.env.JWT_SECRET, 
-            { expiresIn: '5d' }  
+            { expiresIn: '2h' }  
           );
 
         res.status(200).json({
