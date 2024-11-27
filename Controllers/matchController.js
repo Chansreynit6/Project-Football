@@ -1,5 +1,6 @@
 const footballmatch = require("../models/matchModel");
 
+
 exports.createMatch = async (req, res) => {
   try {
     const { homeTeam, awayTeam, date, venue, status, referee, events, league } =
@@ -78,10 +79,12 @@ exports.deleteMatch = async (req, res) => {
   try {
     const matchId = req.params.id;
     const matchDelete = await footballmatch.findByIdAndDelete(matchId);
+
     return res
       .status(200)
       .json({ message: "match delete successful", matchDelete });
   } catch (error) {
+
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }
