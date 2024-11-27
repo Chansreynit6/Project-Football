@@ -5,8 +5,7 @@ const connectDB = require("./config/db"); // Assuming you have a db.js file to c
 const authRoutes = require("./routes/authRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
 const footballers = require ('./routes/footballerRoutes');
-// const { protect, adminOnly } = require('./Modelware/authmodelware'); 
-const matchRoute = require('./routes/matchRoute')
+const matchRoute = require('./routes/matchRoute');
 
 dotenv.config();
 
@@ -15,12 +14,12 @@ app.use(express.json());
 connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
-app.use((req, res, next) => {
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).send("Empty or invalid JSON body");
-  }
-  next(); // Proceed to the next middleware
-});
+// app.use((req, res, next) => {
+//   if (!req.body || Object.keys(req.body).length === 0) {
+//     return res.status(400).send("Empty or invalid JSON body");
+//   }
+//   next(); // Proceed to the next middleware
+// });
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
