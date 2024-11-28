@@ -1,23 +1,31 @@
 const Ticket = require("../models/ticket");
+const footballmatch = require("../models/matchModel");
 
 // Controller to create a ticket
 const createTicket = async (req, res) => {
   try {
-    const { title, description, status, priority } = req.body;
+    const { match_id, user_id, price, chair_number, status, date_selling } =
+      req.body;
 
-    // Check if title and description are provided
-    if (!title || !description) {
-      return res
-        .status(400)
-        .json({ error: "Title and description are required" });
+    // Check if all required fields are provided
+    if (!match_id || !user_id || !price || !chair_number) {
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    // Create a new ticket using the provided or default data
+    // Find the match to ensure it exists
+    const match = await footballmatch.findById(match_id);
+    if (!match) {
+      return res.status(404).json({ error: "Match not found" });
+    }
+
+    // Create the ticket
     const ticket = new Ticket({
-      title,
-      description,
-      status: status || "open", // Default to 'open' if no status is provided
-      priority: priority || "medium", // Default to 'medium' if no priority is provided
+      match_id,
+      user_id,
+      price,
+      chair_number,
+      date_selling: date_selling || Date.now(), // Use provided date_selling or default to current date/time
+      status: status || "booked", // Default to 'booked' if no status is provided
     });
 
     // Save the ticket to the database
